@@ -30,7 +30,13 @@ COPY --from=build-web /build/apps/web/dist /build/web
 COPY --from=build-web /build/wing /build/wing
 
 WORKDIR /build/wing
-
+RUN cd /build/wing && \
+    echo "===== dae dependency =====" && \
+    go list -m github.com/daeuniverse/dae && \
+    echo "===== Marshaller =====" && \
+    grep -Rni "type Marshaller" . $(go env GOPATH)/pkg/mod/github.com/daeuniverse 2>/dev/null | head -20 && \
+    echo "===== Bytes =====" && \
+    grep -Rni "func.*Bytes" . $(go env GOPATH)/pkg/mod/github.com/daeuniverse 2>/dev/null | head -30
 RUN make \
     APPNAME=daed \
     VERSION=$DAED_VERSION \
