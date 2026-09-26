@@ -21,6 +21,27 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
+      # Remove this compatibility patch when wing includes the instance-stats fix.
+      - name: Fix runtime overview statistics source
+        shell: bash
+        run: |
+          python3 - <<'PYTHON'
+          from pathlib import Path
+
+          path = Path("wing/dae/runtime.go")
+          source = path.read_text()
+          replacements = {
+              "\tactiveTCPConnections := 0": "\tsnapshot := control.RuntimeStatsSnapshot{UpdatedAt: time.Now()}",
+              "\t\tactiveTCPConnections = ctl.ActiveTCPConnections()": "\t\t// Traffic is recorded on this control plane, not the legacy global store.\n\t\tsnapshot = ctl.SnapshotRuntimeStats(windowSec, maxPoints)",
+              "\n\tsnapshot := control.SnapshotRuntimeStats(activeTCPConnections, control.DefaultUdpEndpointPool.Count(), windowSec, maxPoints)\n": "",
+          }
+          for old, new in replacements.items():
+              if source.count(old) != 1:
+                  raise SystemExit("wing runtime statistics source changed; review the patch before building")
+              source = source.replace(old, new, 1)
+          path.write_text(source)
+          PYTHON
+
       # 从 apps/web/package.json 自动读取 version
       - name: Get daed version
         id: version
