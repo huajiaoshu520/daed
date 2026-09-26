@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.21.1](https://github.com/huajiaoshu520/daed/compare/dae-node-parser-v1.21.0...dae-node-parser-v1.21.1) (2026-09-26)
+
+
+### Bug Fixes
+
+* **web:** first batch of dashboard fixes from a whole-project review ([#784](https://github.com/huajiaoshu520/daed/issues/784)) ([b3043aa](https://github.com/huajiaoshu520/daed/commit/b3043aa7ce07c774c65e546112aa2c7a1c12edb5))
+
 ## [1.21.0](https://github.com/daeuniverse/daed/compare/dae-node-parser-v1.20.1...dae-node-parser-v1.21.0) (2026-03-31)
 
 
