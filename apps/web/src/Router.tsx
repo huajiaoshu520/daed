@@ -9,12 +9,13 @@ import { endpointURLAtom, tokenAtom } from '~/store'
 export function Router() {
   const endpointURL = useStore(endpointURLAtom)
   const token = useStore(tokenAtom)
+  const identity = `${endpointURL}|${token}`
   const RouterType = import.meta.env.DEV ? BrowserRouter : HashRouter
 
   return (
     <RouterType>
       <Routes>
-        <Route path="/" element={<MainLayout />}>
+        <Route path="/" element={<MainLayout key={identity} />}>
           <Route index element={<OrchestratePage />} />
         </Route>
 
@@ -25,6 +26,7 @@ export function Router() {
             path="/graphiql"
             element={
               <GraphiQL
+                key={identity}
                 fetcher={createGraphiQLFetcher({
                   url: endpointURL,
                   headers: { authorization: `Bearer ${token}` },
