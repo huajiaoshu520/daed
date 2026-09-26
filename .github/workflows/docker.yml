@@ -6,6 +6,10 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  packages: write
+
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository_owner }}/daed
@@ -21,26 +25,38 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      # Remove this compatibility patch when wing includes the instance-stats fix.
-      - name: Fix runtime overview statistics source
+      # daed main + dae-wing main + dae main
+      - name: Update all submodules to latest main
         shell: bash
         run: |
-          python3 - <<'PYTHON'
-          from pathlib import Path
+          git submodule sync --recursive
 
-          path = Path("wing/dae/runtime.go")
-          source = path.read_text()
-          replacements = {
-              "\tactiveTCPConnections := 0": "\tsnapshot := control.RuntimeStatsSnapshot{UpdatedAt: time.Now()}",
-              "\t\tactiveTCPConnections = ctl.ActiveTCPConnections()": "\t\t// Traffic is recorded on this control plane, not the legacy global store.\n\t\tsnapshot = ctl.SnapshotRuntimeStats(windowSec, maxPoints)",
-              "\n\tsnapshot := control.SnapshotRuntimeStats(activeTCPConnections, control.DefaultUdpEndpointPool.Count(), windowSec, maxPoints)\n": "",
-          }
-          for old, new in replacements.items():
-              if source.count(old) != 1:
-                  raise SystemExit("wing runtime statistics source changed; review the patch before building")
-              source = source.replace(old, new, 1)
-          path.write_text(source)
-          PYTHON
+          # 更新 dae-wing 到 main 最新
+          git submodule update --init wing
+          git -C wing fetch origin main
+          git -C wing checkout --detach origin/main
+
+          # 更新 dae 到 main 最新
+          git -C wing submodule sync --recursive
+          git -C wing submodule update --init dae-core
+          git -C wing/dae-core fetch origin main
+          git -C wing/dae-core checkout --detach origin/main
+
+          # 初始化 dae 需要的其他子模块
+          git -C wing/dae-core submodule sync --recursive
+          git -C wing/dae-core submodule update --init --recursive
+
+          echo "===== daed ====="
+          git log -1 --oneline
+
+          echo "===== dae-wing ====="
+          git -C wing log -1 --oneline
+
+          echo "===== dae ====="
+          git -C wing/dae-core log -1 --oneline
+
+          echo "===== submodules ====="
+          git submodule status --recursive
 
       # 从 apps/web/package.json 自动读取 version
       - name: Get daed version
