@@ -84,6 +84,7 @@ export function generateV2rayLink(data: V2rayFormValues): string {
   if (protocol === 'vless') {
     const params: Record<string, unknown> = {
       type: net,
+      encryption: data.vlessEncryption || 'none',
       security: tls,
       host,
       headerType: type,
