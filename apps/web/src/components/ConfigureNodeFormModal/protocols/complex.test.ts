@@ -29,3 +29,16 @@ it.each([
 
   expect(JSON.parse(Base64.decode(link.slice('vmess://'.length)))).toMatchObject(expected)
 })
+
+
+it('preserves VLESS XHTTP encryption and REALITY parameters when editing', async () => {
+  const { parseVLessUrl } = await import('@daeuniverse/dae-node-parser')
+  const { v2rayProtocol } = await import('./complex')
+  const encryption = 'mlkem768x25519plus.native.0rtt.' + 'A'.repeat(43)
+  const query = new URLSearchParams({ type: 'xhttp', security: 'reality', encryption, pbk: 'public-key', sid: '5c', mode: 'auto', path: '/', extra: '{"xPaddingBytes":"100-1000"}' })
+  const original = `vless://f7c43346-b688-4300-aa3b-350e6c94cfa7@example.com:443?${query}`
+  const parsed = parseVLessUrl(original)
+  expect(parsed?.vlessEncryption).toBe(encryption)
+  const result = new URL(v2rayProtocol.generateLink({ ...v2rayProtocol.defaultValues, ...parsed, protocol: 'vless' }))
+  for (const [key, value] of query) expect(result.searchParams.get(key)).toBe(value)
+})
