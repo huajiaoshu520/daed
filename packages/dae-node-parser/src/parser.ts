@@ -610,7 +610,8 @@ export function parseVLessUrl(url: string): (Partial<V2rayConfig> & { protocol: 
       port: parsed.port ? Number.parseInt(parsed.port, 10) : 443,
       ps: decodeURIComponent(parsed.hash.slice(1) || ''),
       // Protocol fields
-      scy: 'none', // VLESS encryption is always 'none'
+      scy: 'none', // VMess security does not represent VLESS encryption
+      vlessEncryption: params.get('encryption') || 'none',
       aid: 0,
       // Transport fields (4.3)
       net: normalizeNetworkType(netType),
