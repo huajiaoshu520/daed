@@ -90,6 +90,14 @@ export function V2rayForm({ onLinkGeneration, initialValues, actionsPortal }: No
         />
       )}
 
+      {formValues.protocol === 'vless' && (
+        <Input
+          label="VLESS encryption"
+          value={formValues.vlessEncryption || 'none'}
+          onChange={(e) => setValue('vlessEncryption', e.target.value)}
+        />
+      )}
+
       {formValues.type !== 'dtls' && (
         <Select
           label="TLS"
