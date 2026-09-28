@@ -21,6 +21,7 @@ export const v2raySchema = z.object({
   flow: z.enum(['none', 'xtls-rprx-vision', 'xtls-rprx-vision-udp443']),
   alpn: z.string(),
   ech: z.string(), // Encrypted Client Hello
+  vlessEncryption: z.string().optional(),
   scy: z.enum(['auto', 'aes-128-gcm', 'chacha20-poly1305', 'none', 'zero']),
   v: z.string(),
   allowInsecure: z.boolean(),
