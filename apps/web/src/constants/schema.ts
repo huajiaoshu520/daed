@@ -16,6 +16,7 @@ export const v2raySchema = z.object({
   // XHTTP specific
   xhttpMode: z.string(),
   xhttpExtra: z.string(),
+  xhttpPaddingBytes: z.string().optional(),
   // TLS fields (xtls is deprecated, use reality instead)
   tls: z.enum(['none', 'tls', 'reality']),
   flow: z.enum(['none', 'xtls-rprx-vision', 'xtls-rprx-vision-udp443']),
@@ -32,6 +33,7 @@ export const v2raySchema = z.object({
   sid: z.string(), // short ID
   spx: z.string(), // spider x (path)
   pqv: z.string(), // ML-DSA-65 public key (mldsa65Verify)
+  supportX25519MLKEM768: z.string().optional(),
 })
 
 export const ssSchema = z.object({

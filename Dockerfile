@@ -12,10 +12,14 @@ RUN pnpm install --frozen-lockfile
 RUN pnpm build
 
 
-# Pin the official Xray module. Keep its dependencies out of wing's module.
-FROM golang:1.26-bookworm AS build-xray
+# Build the official release at a verified commit; keep its Go dependencies
+# isolated from wing. Xray v26.10.29 requires Go 1.27.
+FROM golang:1.27-bookworm AS build-xray
 ENV CGO_ENABLED=0
-RUN go install github.com/xtls/xray-core/main@v1.260327.0
+WORKDIR /build/xray
+RUN git clone --depth 1 --branch v26.10.29 https://github.com/XTLS/Xray-core.git . \
+    && test "$(git rev-parse HEAD)" = "0afec66085a85191e9dd2a4a6646c7c9a94688d1" \
+    && go build -trimpath -ldflags="-s -w" -o /usr/local/bin/xray ./main
 
 FROM golang:1.26-bookworm AS build-bundle
 
@@ -35,7 +39,7 @@ COPY --from=build-web /build/apps/web/dist /build/web
 COPY --from=build-web /build/wing /build/wing
 
 WORKDIR /build/wing
-COPY --from=build-xray /go/bin/main /usr/local/bin/xray
+COPY --from=build-xray /usr/local/bin/xray /usr/local/bin/xray
 RUN go test ./component/xray
 RUN cd /build/wing && \
     echo "===== dae dependency =====" && \
@@ -68,8 +72,8 @@ RUN wget -O /usr/local/share/daed/geoip.dat \
 
 COPY --from=build-bundle /build/wing/daed /usr/local/bin/daed
 
-COPY --from=build-xray /go/bin/main /usr/local/bin/xray
-COPY --from=build-xray /go/pkg/mod/github.com/xtls/xray-core@v1.260327.0/LICENSE /usr/local/share/licenses/xray/LICENSE
+COPY --from=build-xray /usr/local/bin/xray /usr/local/bin/xray
+COPY --from=build-xray /build/xray/LICENSE /usr/local/share/licenses/xray/LICENSE
 
 EXPOSE 2023
 

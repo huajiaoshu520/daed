@@ -104,6 +104,7 @@ export function generateV2rayLink(data: V2rayFormValues): string {
       params.path = path
       if (xhttpMode) params.mode = xhttpMode
       if (xhttpExtra) params.extra = xhttpExtra
+      if (data.xhttpPaddingBytes) params.x_padding_bytes = data.xhttpPaddingBytes
     } else {
       params.path = path
     }
@@ -118,6 +119,7 @@ export function generateV2rayLink(data: V2rayFormValues): string {
       if (sid) params.sid = sid
       if (spx) params.spx = spx
       if (pqv) params.pqv = pqv
+      if (data.supportX25519MLKEM768 !== undefined) params['support-x25519mlkem768'] = data.supportX25519MLKEM768
     }
 
     return generateURL({

@@ -31,14 +31,17 @@ it.each([
 })
 
 
-it('preserves VLESS XHTTP encryption and REALITY parameters when editing', async () => {
+it.each(['true', 'false'])('preserves encrypted XHTTP Vision links and exporter hint %s when editing', async (hint) => {
   const { parseVLessUrl } = await import('@daeuniverse/dae-node-parser')
   const { v2rayProtocol } = await import('./complex')
-  const encryption = 'mlkem768x25519plus.native.0rtt.' + 'A'.repeat(43)
-  const query = new URLSearchParams({ type: 'xhttp', security: 'reality', encryption, pbk: 'public-key', sid: '5c', mode: 'auto', path: '/', extra: '{"xPaddingBytes":"100-1000"}' })
+  const encryption = `mlkem768x25519plus.native.0rtt.${'A'.repeat(43)}`
+  const query = new URLSearchParams({ type: 'xhttp', security: 'reality', encryption, pbk: 'public-key', sid: '5c', mode: 'auto', path: '/', extra: '{"mode":"auto","xPaddingBytes":"100-1000"}', flow: 'xtls-rprx-vision', 'support-x25519mlkem768': hint, x_padding_bytes: '100-1000' })
   const original = `vless://f7c43346-b688-4300-aa3b-350e6c94cfa7@example.com:443?${query}`
   const parsed = parseVLessUrl(original)
   expect(parsed?.vlessEncryption).toBe(encryption)
-  const result = new URL(v2rayProtocol.generateLink({ ...v2rayProtocol.defaultValues, ...parsed, protocol: 'vless' }))
+  // Validate through the same schema as the editor, which strips unknown keys.
+  const { v2raySchema } = await import('~/constants/schema')
+  const edited = v2raySchema.parse({ ...v2rayProtocol.defaultValues, ...parsed })
+  const result = new URL(v2rayProtocol.generateLink({ ...edited, protocol: 'vless' }))
   for (const [key, value] of query) expect(result.searchParams.get(key)).toBe(value)
 })

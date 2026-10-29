@@ -278,6 +278,14 @@ export function V2rayForm({ onLinkGeneration, initialValues, actionsPortal }: No
 
       {formValues.net === 'xhttp' && (
         <>
+          {formValues.protocol === 'vless' && (
+            <Input
+              label="XHTTP Padding Bytes"
+              placeholder="100-1000"
+              value={formValues.xhttpPaddingBytes || ''}
+              onChange={(e) => setValue('xhttpPaddingBytes', e.target.value)}
+            />
+          )}
           <Input
             label="XHTTP Mode"
             value={formValues.xhttpMode}

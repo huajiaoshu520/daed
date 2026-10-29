@@ -2,6 +2,9 @@ name: Build daed Docker
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
@@ -28,144 +31,14 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      # ============================================================
-      # daed main + dae-wing main + dae main
-      #
-      # 固定使用：
-      # huajiaoshu520/daed
-      # huajiaoshu520/dae-wing
-      # huajiaoshu520/dae
-      # ============================================================
-      - name: Update daed + dae-wing + dae to latest main
+      # Build exactly the reviewed source, including the pinned wing/core.
+      - name: Show pinned source revisions
         shell: bash
         run: |
           set -euo pipefail
-
-          echo "======================================"
-          echo " Updating source repositories"
-          echo "======================================"
-
-          # --------------------------------------------------------
-          # daed
-          # actions/checkout 已经 checkout 当前 main
-          # --------------------------------------------------------
-          echo
-          echo ">>> daed"
-
-          git remote set-url origin \
-            https://github.com/huajiaoshu520/daed.git
-
-          # --------------------------------------------------------
-          # dae-wing
-          # --------------------------------------------------------
-          echo
-          echo ">>> dae-wing"
-
-          git submodule sync --recursive
-          git submodule update --init wing
-
-          git -C wing remote set-url origin \
-            https://github.com/huajiaoshu520/dae-wing.git
-
-          git -C wing fetch origin main
-          git -C wing checkout --detach origin/main
-
-          # --------------------------------------------------------
-          # dae-core
-          # --------------------------------------------------------
-          echo
-          echo ">>> dae-core"
-
-          git -C wing submodule sync --recursive
-          git -C wing submodule update --init dae-core
-
-          git -C wing/dae-core remote set-url origin \
-            https://github.com/huajiaoshu520/dae.git
-
-          git -C wing/dae-core fetch origin main
-          git -C wing/dae-core checkout --detach origin/main
-
-          # --------------------------------------------------------
-          # 初始化 dae-core 自己需要的其他子模块
-          # --------------------------------------------------------
-          echo
-          echo ">>> dae-core submodules"
-
-          git -C wing/dae-core submodule sync --recursive
-          git -C wing/dae-core submodule update --init --recursive
-
-          # --------------------------------------------------------
-          # 输出实际构建源码信息
-          # --------------------------------------------------------
-          echo
-          echo "======================================"
-          echo "           BUILD SOURCE INFO"
-          echo "======================================"
-
-          echo
-          echo "===== daed ====="
-          echo "Repository:"
-          git remote get-url origin
-          echo "Branch:"
-          git branch --show-current
-          echo "Commit:"
           git rev-parse HEAD
-          echo "Commit short:"
-          git rev-parse --short HEAD
-          echo "Description:"
-          git log -1 --oneline
-
-          echo
-          echo "===== dae-wing ====="
-          echo "Repository:"
-          git -C wing remote get-url origin
-          echo "Target branch:"
-          echo "main"
-          echo "Commit:"
-          git -C wing rev-parse HEAD
-          echo "Commit short:"
-          git -C wing rev-parse --short HEAD
-          echo "Description:"
-          git -C wing log -1 --oneline
-
-          echo
-          echo "===== dae-core ====="
-          echo "Repository:"
-          git -C wing/dae-core remote get-url origin
-          echo "Target branch:"
-          echo "main"
-          echo "Commit:"
-          git -C wing/dae-core rev-parse HEAD
-          echo "Commit short:"
-          git -C wing/dae-core rev-parse --short HEAD
-          echo "Description:"
-          git -C wing/dae-core log -1 --oneline
-
-          echo
-          echo "===== All submodules ====="
           git submodule status --recursive
-
-          echo
-          echo "======================================"
-          echo "            SOURCE SUMMARY"
-          echo "======================================"
-
-          echo "daed"
-          echo "  repo   : $(git remote get-url origin)"
-          echo "  commit : $(git rev-parse HEAD)"
-
-          echo
-          echo "dae-wing"
-          echo "  repo   : $(git -C wing remote get-url origin)"
-          echo "  commit : $(git -C wing rev-parse HEAD)"
-
-          echo
-          echo "dae-core"
-          echo "  repo   : $(git -C wing/dae-core remote get-url origin)"
-          echo "  commit : $(git -C wing/dae-core rev-parse HEAD)"
-
-          echo
-          echo "======================================"
+          test -f wing/component/xray/config.go
 
       # ============================================================
       # 从 apps/web/package.json 自动读取 daed 版本
@@ -195,6 +68,7 @@ jobs:
       # Login GHCR
       # ============================================================
       - name: Login to GHCR
+        if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
@@ -225,7 +99,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          push: true
+          push: ${{ github.event_name != 'pull_request' }}
           platforms: linux/amd64
 
           build-args: |
