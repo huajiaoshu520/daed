@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.22.0](https://github.com/huajiaoshu520/daed/compare/dae-node-parser-v1.21.0...dae-node-parser-v1.22.0) (2026-10-29)
+
+
+### Features
+
+* **xray:** describe VLESS encryption parameter [skip ci] ([09f9830](https://github.com/huajiaoshu520/daed/commit/09f9830467d18f18fbd36434c390995534af487b))
+
+
+### Bug Fixes
+
+* **web:** first batch of dashboard fixes from a whole-project review ([#784](https://github.com/huajiaoshu520/daed/issues/784)) ([b3043aa](https://github.com/huajiaoshu520/daed/commit/b3043aa7ce07c774c65e546112aa2c7a1c12edb5))
+* **xray:** preserve VLESS encryption during import [skip ci] ([b7bdaac](https://github.com/huajiaoshu520/daed/commit/b7bdaac68c57e5aec8604b0eb6486b8c0da8eec2))
+* **xray:** run encrypted XHTTP Vision links with Xray 26.10.29 ([325d3a2](https://github.com/huajiaoshu520/daed/commit/325d3a26e7fe9103f6ce43b3535c0c050f4f0231))
+* **xray:** upgrade core and preserve encrypted XHTTP Vision links ([127b130](https://github.com/huajiaoshu520/daed/commit/127b130e9bd231d4317d41bbcafa925660d1be1c))
+
 ## [1.21.0](https://github.com/daeuniverse/daed/compare/dae-node-parser-v1.20.1...dae-node-parser-v1.21.0) (2026-03-31)
 
 
