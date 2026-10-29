@@ -62,12 +62,15 @@ Try daed directly in your browser without installation:
 
 Please refer to the [Quick Start Guide](./docs/getting-started.md) to start using daed right away!
 
+This fork includes Xray for VLESS XHTTP / REALITY with VLESS Encryption and
+Vision. See [Xray support and limits](docs/XRAY.md) for supported link parameters.
+
 ## 🐳 Docker Deployment
 
 Pull the prebuilt image:
 
 ```bash
-docker pull ghcr.io/daeuniverse/daed
+docker pull ghcr.io/huajiaoshu520/daed
 ```
 
 Run the container:
@@ -81,7 +84,7 @@ docker run -d \
     -v /sys:/sys \
     -v /etc/daed:/etc/daed \
     --name=daed \
-    ghcr.io/daeuniverse/daed:latest
+    ghcr.io/huajiaoshu520/daed:latest
 ```
 
 Or use Docker Compose:
@@ -90,7 +93,7 @@ Or use Docker Compose:
 # docker-compose.yml
 services:
   daed:
-    image: ghcr.io/daeuniverse/daed
+    image: ghcr.io/huajiaoshu520/daed
     container_name: daed
     privileged: true
     network_mode: host
@@ -118,7 +121,7 @@ Access the dashboard at `http://localhost:2023`.
 
 ```bash
 # Clone the repository
-git clone https://github.com/daeuniverse/daed.git
+git clone --recurse-submodules https://github.com/huajiaoshu520/daed.git
 cd daed
 
 # Install dependencies

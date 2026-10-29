@@ -43,6 +43,7 @@ export interface V2rayConfig {
   // XHTTP specific
   xhttpMode: string // mode
   xhttpExtra: string // extra
+  xhttpPaddingBytes?: string // x_padding_bytes exporter alias
   // TLS fields (4.4)
   tls: 'none' | 'tls' | 'reality' // security (removed 'xtls' as deprecated)
   fp: string // fingerprint
@@ -56,6 +57,7 @@ export interface V2rayConfig {
   sid: string // REALITY shortId
   spx: string // REALITY spiderX
   pqv: string // REALITY ML-DSA-65 public key (mldsa65Verify)
+  supportX25519MLKEM768?: string // exporter hint; negotiated by Xray/uTLS
   // Other
   allowInsecure: boolean
   v: string // version (legacy)

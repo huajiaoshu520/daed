@@ -299,3 +299,12 @@ describe('parseNodeUrl', () => {
     expect(parseNodeUrl('unknown://example.com')).toBeNull()
   })
 })
+
+it('preserves encrypted XHTTP Vision and exporter parameters', () => {
+  const encryption = `mlkem768x25519plus.native.0rtt.${'A'.repeat(43)}`
+  const query = new URLSearchParams({ type: 'xhttp', encryption, flow: 'xtls-rprx-vision', security: 'reality', 'support-x25519mlkem768': 'true', x_padding_bytes: '100-1000', extra: '{"mode":"auto","xPaddingBytes":"100-1000"}' })
+  expect(parseV2rayUrl(`vless://uuid@example.com:443/?${query}`)).toMatchObject({
+    net: 'xhttp', tls: 'reality', vlessEncryption: encryption, flow: 'xtls-rprx-vision', grpcMode: 'gun',
+    supportX25519MLKEM768: 'true', xhttpPaddingBytes: '100-1000', xhttpExtra: '{"mode":"auto","xPaddingBytes":"100-1000"}',
+  })
+})

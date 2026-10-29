@@ -446,7 +446,7 @@ export function parseVMessUrl(url: string): (Partial<V2rayConfig> & { protocol: 
     const mainContent = hashIndex !== -1 ? content.slice(0, hashIndex) : content
 
     // If content contains @ and doesn't look like base64, try URL format first
-    if (mainContent.includes('@') && !mainContent.match(/^[A-Z0-9+/=]+$/i)) {
+    if (mainContent.includes('@') && !/^[A-Z0-9+/=]+$/i.test(mainContent)) {
       const result = parseVMessStandardUrl(url)
 
       if (result) {
@@ -619,11 +619,12 @@ export function parseVLessUrl(url: string): (Partial<V2rayConfig> & { protocol: 
       host: params.get('host') || '',
       path: getPathValue(params, netType),
       // gRPC specific
-      grpcMode: (params.get('mode') || 'gun') as V2rayConfig['grpcMode'],
+      grpcMode: (netType === 'grpc' ? params.get('mode') || 'gun' : 'gun') as V2rayConfig['grpcMode'],
       grpcAuthority: params.get('authority') || '',
       // XHTTP specific
       xhttpMode: netType === 'xhttp' ? params.get('mode') || '' : '',
       xhttpExtra: params.get('extra') || '',
+      xhttpPaddingBytes: params.get('x_padding_bytes') || '',
       // TLS fields (4.4)
       tls: (params.get('security') || 'none') as V2rayConfig['tls'],
       fp: params.get('fp') || '',
@@ -637,6 +638,7 @@ export function parseVLessUrl(url: string): (Partial<V2rayConfig> & { protocol: 
       sid: params.get('sid') || '',
       spx: params.get('spx') || '',
       pqv: params.get('pqv') || '',
+      supportX25519MLKEM768: params.get('support-x25519mlkem768') ?? undefined,
       // Other
       allowInsecure: false, // Not allowed in standard proposal for security
       v: '',
