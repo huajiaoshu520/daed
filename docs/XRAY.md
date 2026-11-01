@@ -125,3 +125,17 @@ The last task result is saved in the config volume. After a daed restart,
 unfinished tasks are marked interrupted; downloads are not silently resumed.
 Check the selected core and retry. A browser connection error alone does not
 mean an update failed: the next successful status request recovers its result.
+
+### Resilient release downloads
+
+Downloads prefer the official GitHub release asset API with binary content
+negotiation, retaining the official browser download URL as a fallback. Both
+paths must pass the same release SHA256 verification. Transient EOF, reset,
+timeout and HTTP 408/429/5xx failures receive at most three attempts. Retries
+use HTTP/1.1 with normal certificate verification. Partial files are discarded,
+not joined. Authentication/not-found and checksum failures are not retried.
+
+The panel distinguishes connecting, receiving bytes and retrying, showing the
+attempt number and last transport error. Dial/TLS/header timeouts are bounded;
+30 seconds without data cancels an attempt. The existing three-minute archive
+and five-minute task deadlines still cap the operation.

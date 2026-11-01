@@ -56,6 +56,9 @@ let mockTask = {
   phase: '',
   downloadedBytes: 0,
   totalBytes: 0,
+  attempt: 0,
+  maxAttempts: 3,
+  lastError: '',
   error: '',
 }
 let mockTaskStarted = 0
@@ -98,6 +101,9 @@ const mockHandlers: Record<string, (variables?: Variables) => unknown> = {
       phase: 'queued',
       downloadedBytes: 0,
       totalBytes: 0,
+      attempt: 1,
+      maxAttempts: 3,
+      lastError: '',
       error: '',
     }
     return { startXrayTask: { ...mockTask } }
