@@ -39,6 +39,7 @@ export function XrayCoreManager() {
   const [open, setOpen] = useState(false)
   const [version, setVersion] = useState('')
   const [path, setPath] = useState('')
+  const [previousTaskID, setPreviousTaskID] = useState('')
   const core = useQuery({
     queryKey: ['xrayCore'],
     queryFn: async () =>
@@ -64,6 +65,7 @@ export function XrayCoreManager() {
     retry: false,
   })
   const action = useMutation({
+    onMutate: () => setPreviousTaskID(task.data?.id || ''),
     mutationFn: async (variables: { kind: string; version?: string; path?: string }) =>
       (
         await client.request<{ startXrayTask: Task }>(
@@ -84,8 +86,10 @@ export function XrayCoreManager() {
     }
   }, [taskID, taskStatus, cache])
   const busy = action.isPending || taskStatus === 'running'
+  const unavailable = busy || task.isPending || task.isError
+  const recovered = Boolean(taskID && taskID !== previousTaskID)
   const selectedVersion = version || releases.data?.find((r) => !r.prerelease)?.version || ''
-  const error = task.error || core.error || action.error
+  const error = task.error || core.error || (recovered && action.error instanceof TypeError ? null : action.error)
   const downloaded = ((task.data?.downloadedBytes || 0) / (1024 * 1024)).toFixed(1)
   const total = ((task.data?.totalBytes || 0) / (1024 * 1024)).toFixed(1)
 
@@ -146,7 +150,7 @@ export function XrayCoreManager() {
               </p>
             )}
             {releases.data?.length === 0 && <p className="text-sm">{t('xray.noReleases')}</p>}
-            <fieldset disabled={busy} className="max-h-48 overflow-y-auto rounded-md border divide-y">
+            <fieldset disabled={unavailable} className="max-h-48 overflow-y-auto rounded-md border divide-y">
               <legend className="sr-only">{t('xray.chooseVersion')}</legend>
               {releases.data?.map((release) => (
                 <label
@@ -170,7 +174,7 @@ export function XrayCoreManager() {
             <Button
               className="w-full"
               loading={busy && (task.data?.kind === 'install' || action.variables?.kind === 'install')}
-              disabled={busy || !selectedVersion}
+              disabled={unavailable || !selectedVersion}
               onClick={() =>
                 action.mutate({
                   kind: 'install',
@@ -187,14 +191,14 @@ export function XrayCoreManager() {
               label={t('xray.path')}
               placeholder="/usr/bin/xray"
               value={path}
-              disabled={busy}
+              disabled={unavailable}
               onChange={(e) => setPath(e.target.value)}
             />
             <p className="text-xs text-muted-foreground">{t('xray.systemHint')}</p>
             <Button
               variant="outline"
               className="w-full"
-              disabled={busy}
+              disabled={unavailable}
               onClick={() =>
                 action.mutate({
                   kind: 'system',
@@ -208,7 +212,7 @@ export function XrayCoreManager() {
           <div className="flex flex-wrap gap-2">
             <Button
               variant="outline"
-              disabled={busy}
+              disabled={unavailable}
               onClick={() =>
                 action.mutate({
                   kind: 'bundled',
@@ -219,7 +223,7 @@ export function XrayCoreManager() {
             </Button>
             <Button
               variant="outline"
-              disabled={busy || !core.data?.canRollback}
+              disabled={unavailable || !core.data?.canRollback}
               onClick={() => action.mutate({ kind: 'rollback' })}
             >
               {t('xray.rollback')}
