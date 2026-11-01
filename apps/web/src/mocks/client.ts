@@ -59,6 +59,7 @@ let mockTask = {
   attempt: 0,
   maxAttempts: 3,
   lastError: '',
+  warning: '',
   error: '',
 }
 let mockTaskStarted = 0
@@ -75,7 +76,8 @@ function currentMockTask() {
         totalBytes: 15_000_000,
       }
     } else {
-      if (mockTask.kind === 'install')
+      if (mockTask.kind === 'cleanup') mockXrayCore = { ...mockXrayCore, canRollback: false }
+      else if (mockTask.kind === 'install')
         selectMockCore('managed', `/etc/daed/xray/${mockTask.version}/xray`, mockTask.version.replace(/^v/, ''))
       else if (mockTask.kind === 'rollback')
         selectMockCore(previousXrayCore.mode, previousXrayCore.path, previousXrayCore.version)
@@ -104,6 +106,7 @@ const mockHandlers: Record<string, (variables?: Variables) => unknown> = {
       attempt: 1,
       maxAttempts: 3,
       lastError: '',
+      warning: '',
       error: '',
     }
     return { startXrayTask: { ...mockTask } }
