@@ -35,8 +35,39 @@ function getOperationName(document: RequestDocument): string {
   return ''
 }
 
+let mockXrayCore = { mode: 'bundled', path: '/usr/local/bin/xray', version: '26.10.31', error: '', canRollback: false }
+let previousXrayCore = mockXrayCore
+
+function mockVariable(variables: Variables | undefined, key: string) {
+  return String((variables as Record<string, unknown> | undefined)?.[key] || '')
+}
+
+function selectMockCore(mode: string, path: string, version: string) {
+  previousXrayCore = mockXrayCore
+  mockXrayCore = { mode, path, version, error: '', canRollback: true }
+  return mockXrayCore
+}
+
 // Mock response handlers mapped by operation name
 const mockHandlers: Record<string, (variables?: Variables) => unknown> = {
+  XrayCore: () => ({ xrayCore: mockXrayCore }),
+  XrayReleases: () => ({
+    xrayReleases: ['v26.10.31', 'v26.10.21', 'v26.9.30'].map((version) => ({ version, prerelease: false })),
+  }),
+  InstallXrayCore: (variables) => ({
+    installXrayCore: selectMockCore(
+      'managed',
+      `/etc/daed/xray/${mockVariable(variables, 'version')}/xray`,
+      mockVariable(variables, 'version').replace(/^v/, ''),
+    ),
+  }),
+  SelectXrayCore: (variables) => ({
+    selectXrayCore: selectMockCore('system', mockVariable(variables, 'path') || '/usr/local/bin/xray', '26.10.31'),
+  }),
+  RestoreXrayCore: () => ({ selectXrayCore: selectMockCore('bundled', '/usr/local/bin/xray', '26.10.31') }),
+  RollbackXrayCore: () => ({
+    rollbackXrayCore: selectMockCore(previousXrayCore.mode, previousXrayCore.path, previousXrayCore.version),
+  }),
   // Queries
   General: () => mockGeneral,
   Configs: () => mockConfigs,

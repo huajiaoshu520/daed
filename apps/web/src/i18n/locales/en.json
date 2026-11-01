@@ -1,4 +1,29 @@
 {
+  "xray": {
+    "title": "Xray core manager",
+    "description": "Update to an official release or use your system Xray.",
+    "loading": "Loading…",
+    "managed": "Core managed by daed",
+    "refresh": "Refresh releases",
+    "warning": "Switching interrupts existing XHTTP connections. Older versions may be incompatible; failed validation keeps your current core.",
+    "noReleases": "No verifiable release is available for this platform.",
+    "chooseVersion": "Choose Xray version",
+    "prerelease": "Prerelease",
+    "install": "Download and switch",
+    "system": "System / custom core",
+    "path": "Xray executable path",
+    "systemHint": "Leave empty to find xray in PATH. Docker paths refer to the container. Mount a host core into the container first and ensure runtime compatibility.",
+    "useSystem": "Use system / custom core",
+    "useBundled": "Restore bundled core",
+    "rollback": "Return to previous selection",
+    "working": "Downloading, validating or switching. Please wait…",
+    "success": "Core switched. XHTTP connections will reconnect automatically.",
+    "mode": {
+      "bundled": "Bundled with image / installation",
+      "managed": "Managed by daed (persistent)",
+      "system": "System / custom path"
+    }
+  },
   "a11y": {
     "addItem": "Add item",
     "removeItem": "Remove item",

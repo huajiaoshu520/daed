@@ -1,4 +1,29 @@
 {
+  "xray": {
+    "title": "Xray 内核管理",
+    "description": "选择官方版本更新，或使用系统安装的 Xray。",
+    "loading": "正在读取…",
+    "managed": "daed 管理的内核",
+    "refresh": "刷新版本列表",
+    "warning": "切换内核会中断现有 XHTTP 连接。较旧版本可能不兼容当前配置；校验失败将保留原内核。",
+    "noReleases": "没有可校验的适配版本。",
+    "chooseVersion": "选择 Xray 版本",
+    "prerelease": "预发布",
+    "install": "下载并切换",
+    "system": "系统 / 自定义内核",
+    "path": "Xray 可执行文件路径",
+    "systemHint": "留空则在 PATH 中查找 xray。Docker 中的路径属于容器；宿主机内核需先挂载进容器，且应兼容容器运行环境。",
+    "useSystem": "使用系统 / 自定义内核",
+    "useBundled": "恢复内置内核",
+    "rollback": "回退到上一次选择",
+    "working": "正在下载、校验或切换，请稍候…",
+    "success": "内核已切换，XHTTP 连接将自动重建。",
+    "mode": {
+      "bundled": "镜像 / 安装包内置",
+      "managed": "daed 管理（持久化）",
+      "system": "系统 / 自定义路径"
+    }
+  },
   "a11y": {
     "addItem": "添加项目",
     "removeItem": "删除项目",
