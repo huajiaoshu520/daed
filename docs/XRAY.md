@@ -139,3 +139,19 @@ The panel distinguishes connecting, receiving bytes and retrying, showing the
 attempt number and last transport error. Dial/TLS/header timeouts are bounded;
 30 seconds without data cancels an attempt. The existing three-minute archive
 and five-minute task deadlines still cap the operation.
+
+### Old core cleanup
+
+A successful managed-core installation automatically removes obsolete version
+folders under the manager's own config directory. Cleanup runs only after
+archive verification, executable/configuration validation and activation succeed.
+Failed downloads and validation leave existing cores intact. The selected core,
+the bundled recovery executable and their aliases are preserved. Unrelated
+folders and directory symlinks are never followed for deletion.
+
+Use **Clean old versions** to remove leftovers from installations completed
+before this feature, without downloading the current version again. Rollback
+selections targeting a version being deleted are cleared and saved before files
+are removed. A deleted version can be downloaded again from the version list.
+Cleanup failure after a successful switch is reported as a warning, not as a
+failed core update; the cleanup button allows retrying independently.

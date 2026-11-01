@@ -33,6 +33,7 @@ interface Task {
     | 'verifying'
     | 'extracting'
     | 'validating'
+    | 'cleanup'
     | 'switching'
     | 'done'
   downloadedBytes: number
@@ -41,8 +42,9 @@ interface Task {
   attempt: number
   maxAttempts: number
   lastError: string
+  warning: string
 }
-const taskFields = 'id status kind version phase downloadedBytes totalBytes error attempt maxAttempts lastError'
+const taskFields = 'id status kind version phase downloadedBytes totalBytes error attempt maxAttempts lastError warning'
 const fields = 'mode path version error canRollback'
 
 export function XrayCoreManager() {
@@ -241,6 +243,9 @@ export function XrayCoreManager() {
             >
               {t('xray.rollback')}
             </Button>
+            <Button variant="outline" disabled={unavailable} onClick={() => action.mutate({ kind: 'cleanup' })}>
+              {t('xray.cleanOld')}
+            </Button>
           </div>
           {busy && (
             <div role="status" className="space-y-2 rounded-lg border p-3 text-sm">
@@ -271,7 +276,12 @@ export function XrayCoreManager() {
           )}
           {!busy && taskStatus === 'succeeded' && (
             <p role="status" className="text-sm text-green-600 dark:text-green-400">
-              {t('xray.success')}
+              {task.data?.kind === 'cleanup' ? t('xray.cleaned') : t('xray.success')}
+            </p>
+          )}
+          {task.data?.warning && (
+            <p role="status" className="break-words text-sm text-amber-700 dark:text-amber-300">
+              {task.data.warning}
             </p>
           )}
           {task.data?.error && (
