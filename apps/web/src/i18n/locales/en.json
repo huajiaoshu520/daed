@@ -1,10 +1,13 @@
 {
   "xray": {
+    "cleanOld": "Clean old versions",
+    "cleaned": "Old managed versions cleaned. The selected and bundled recovery cores were kept.",
     "attempt": "Attempt {{current}} / {{max}}",
     "starting": "Starting background task…",
     "backgroundHint": "You can close this panel. The task continues in the background; reopen it to recover progress and the result.",
     "connectionError": "Connection interrupted. The task may still be running; its result will be checked when the connection recovers.",
     "phase": {
+      "cleanup": "Cleaning old managed versions…",
       "connecting": "Connecting to the official download service…",
       "retrying": "Connection interrupted, preparing to retry…",
       "queued": "Task accepted, preparing…",
