@@ -24,12 +24,25 @@ interface Task {
   status: 'idle' | 'running' | 'succeeded' | 'failed'
   kind: string
   version: string
-  phase: 'queued' | 'metadata' | 'downloading' | 'verifying' | 'extracting' | 'validating' | 'switching' | 'done'
+  phase:
+    | 'connecting'
+    | 'retrying'
+    | 'queued'
+    | 'metadata'
+    | 'downloading'
+    | 'verifying'
+    | 'extracting'
+    | 'validating'
+    | 'switching'
+    | 'done'
   downloadedBytes: number
   totalBytes: number
   error: string
+  attempt: number
+  maxAttempts: number
+  lastError: string
 }
-const taskFields = 'id status kind version phase downloadedBytes totalBytes error'
+const taskFields = 'id status kind version phase downloadedBytes totalBytes error attempt maxAttempts lastError'
 const fields = 'mode path version error canRollback'
 
 export function XrayCoreManager() {
@@ -232,6 +245,12 @@ export function XrayCoreManager() {
           {busy && (
             <div role="status" className="space-y-2 rounded-lg border p-3 text-sm">
               <p>{task.data?.status === 'running' ? t(`xray.phase.${task.data.phase}`) : t('xray.starting')}</p>
+              {task.data && task.data.attempt > 0 && (
+                <p>{t('xray.attempt', { current: task.data.attempt, max: task.data.maxAttempts })}</p>
+              )}
+              {task.data?.lastError && (
+                <p className="break-words text-xs text-muted-foreground">{task.data.lastError}</p>
+              )}
               {task.data?.status === 'running' && task.data.phase === 'downloading' && (
                 <>
                   <p>
