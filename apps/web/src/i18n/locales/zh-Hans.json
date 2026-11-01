@@ -1,9 +1,12 @@
 {
   "xray": {
+    "attempt": "第 {{current}} / {{max}} 次尝试",
     "starting": "正在启动后台任务…",
     "backgroundHint": "可以关闭此窗口，任务会在后台继续；重新打开即可查看进度和结果。",
     "connectionError": "连接暂时中断，不能据此判断任务失败；恢复连接后会自动查询结果。",
     "phase": {
+      "connecting": "正在连接官方下载服务…",
+      "retrying": "连接中断，正在准备重试…",
       "queued": "任务已接受，正在准备…",
       "metadata": "正在获取官方版本信息…",
       "downloading": "正在下载 Xray…",

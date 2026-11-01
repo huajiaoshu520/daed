@@ -1,9 +1,12 @@
 {
   "xray": {
+    "attempt": "Attempt {{current}} / {{max}}",
     "starting": "Starting background task…",
     "backgroundHint": "You can close this panel. The task continues in the background; reopen it to recover progress and the result.",
     "connectionError": "Connection interrupted. The task may still be running; its result will be checked when the connection recovers.",
     "phase": {
+      "connecting": "Connecting to the official download service…",
+      "retrying": "Connection interrupted, preparing to retry…",
       "queued": "Task accepted, preparing…",
       "metadata": "Fetching official release metadata…",
       "downloading": "Downloading Xray…",
