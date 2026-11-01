@@ -1,10 +1,48 @@
 # VLESS XHTTP / REALITY
 
-The daed image includes official Xray v26.10.29 (commit
-`0afec66085a85191e9dd2a4a6646c7c9a94688d1`, built with Go 1.27).
+The daed image includes official Xray v26.10.31 (commit
+`a4a3dff5b20c2faae567b742c172c7b95e75c083`, built with Go 1.27).
 Import a `vless://` link with `type=xhttp` in Nodes, assign it to a group, and
 apply the configuration. There is no separate SOCKS node or Xray configuration
 to maintain. VLESS encryption is preserved when the node is edited.
+
+## Core management
+
+Open **Xray** in the header (the CPU icon on mobile). The panel shows the selected
+core version, mode and executable path. Administrator authentication is required
+for every core query and operation.
+
+- **Download and switch** lists official XTLS/Xray-core releases for this platform.
+  The archive is verified against GitHub's SHA256 asset digest before extracting
+  only the Xray executable. The executable version and current XHTTP node
+  configurations are checked before activating it. A failed download, digest,
+  executable or configuration check keeps the current selection and workers.
+- **System / custom core** accepts an absolute executable path, or finds `xray`
+  on `PATH` if empty. System package upgrades at that path are picked up on the
+  next XHTTP dial. A custom executable must be trusted by the administrator.
+- **Restore bundled core** uses the installation/image's `xray` on `PATH`.
+  **Return to previous selection** validates and reselects the previous core.
+
+Switching closes existing XHTTP connections; they reconnect on demand. Other dae
+protocols are unaffected. Validation checks local configuration compatibility,
+not connectivity to a remote server. Use the rollback button if a new release
+does not work with your server.
+
+Downloads and selection are saved under `<config-directory>/xray/` (by default
+`/etc/daed/xray/`). Keep `/etc/daed` mounted as a persistent volume when recreating
+Docker containers. Selection is saved atomically only after validation; downloads
+are staged separately and never overwrite a running executable.
+
+In Docker, custom paths refer to **the container**, not the host. To use a host
+Xray, bind-mount a compatible, preferably static binary read-only, for example
+`/usr/bin/xray:/opt/system-xray:ro`, and enter `/opt/system-xray` in the panel.
+Package managers may replace bind-mounted files using rename; recreate the
+container after a host upgrade if the bind mount still points to the old inode.
+
+Automatic downloads support Linux amd64/arm64/386; other architectures can use a
+custom binary. GitHub must be reachable from daed. Only releases with a SHA256
+asset digest appear; prereleases are marked. No background unattended update is
+enabled, so deployments retain their selected core until explicitly changed.
 
 Supported: XHTTP auto, packet-up, stream-up and stream-one; REALITY and TLS
 (HTTP/2 or HTTP/1.1); TCP and UDP payloads; `encryption=none` and Xray's

@@ -13,12 +13,12 @@ RUN pnpm build
 
 
 # Build the official release at a verified commit; keep its Go dependencies
-# isolated from wing. Xray v26.10.29 requires Go 1.27.
+# isolated from wing. Xray v26.10.31 requires Go 1.27.
 FROM golang:1.27-bookworm AS build-xray
 ENV CGO_ENABLED=0
 WORKDIR /build/xray
-RUN git clone --depth 1 --branch v26.10.29 https://github.com/XTLS/Xray-core.git . \
-    && test "$(git rev-parse HEAD)" = "0afec66085a85191e9dd2a4a6646c7c9a94688d1" \
+RUN git clone --depth 1 --branch v26.10.31 https://github.com/XTLS/Xray-core.git . \
+    && test "$(git rev-parse HEAD)" = "a4a3dff5b20c2faae567b742c172c7b95e75c083" \
     && go build -trimpath -ldflags="-s -w" -o /usr/local/bin/xray ./main
 
 FROM golang:1.26-bookworm AS build-bundle
@@ -40,7 +40,7 @@ COPY --from=build-web /build/wing /build/wing
 
 WORKDIR /build/wing
 COPY --from=build-xray /usr/local/bin/xray /usr/local/bin/xray
-RUN go test ./component/xray
+RUN go test ./component/xray ./component/xraycore
 RUN cd /build/wing && \
     echo "===== dae dependency =====" && \
     go list -m github.com/daeuniverse/dae && \
@@ -54,6 +54,7 @@ RUN make \
     OUTPUT=daed \
     WEB_DIST=/build/web/ \
     bundle
+RUN go test ./graphql -run TestXrayCoreSchema -count=1
 
 
 FROM alpine

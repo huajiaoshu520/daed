@@ -54,6 +54,7 @@ import { FormActions } from './FormActions'
 import { KeyboardShortcutsModal } from './KeyboardShortcutsModal'
 import { ProfileSwitcher } from './ProfileSwitcher'
 import { ThemePicker } from './ThemePicker'
+import { XrayCoreManager } from './XrayCoreManager'
 
 function GithubIcon({ className }: { className?: string }) {
   return (
@@ -307,6 +308,7 @@ export function HeaderWithActions() {
 
         <div className={cn('flex items-center', matchSmallScreen ? 'gap-1' : 'gap-2')}>
           {!matchSmallScreen && <ProfileSwitcher />}
+          <XrayCoreManager />
 
           <DropdownMenu open={userMenuOpened} onOpenChange={setUserMenuOpened}>
             <DropdownMenuTrigger asChild>
