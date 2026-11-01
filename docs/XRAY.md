@@ -110,3 +110,18 @@ VLESS encryption, process-crash recovery, closure, gateway authentication and
 network-option preservation. Frontend tests verify editing preserves the
 XHTTP/REALITY/encryption parameters. OpenWrt LAN interception requires a real
 router test; a successful local echo test does not establish that result.
+
+### Background updates
+
+Core switches and downloads run as a bounded background task. The API accepts the
+job immediately; the panel polls short status requests instead of holding one
+request open through a download. Closing/reloading the browser does not cancel
+it. Reopen Xray to recover progress and the final result. Only one core operation
+runs at a time. The panel shows the current phase, downloaded bytes and the
+specific failure. Metadata requests time out after 20 seconds, archive downloads
+after 3 minutes, and a task has an overall 5-minute deadline.
+
+The last task result is saved in the config volume. After a daed restart,
+unfinished tasks are marked interrupted; downloads are not silently resumed.
+Check the selected core and retry. A browser connection error alone does not
+mean an update failed: the next successful status request recovers its result.

@@ -1,5 +1,18 @@
 {
   "xray": {
+    "starting": "Starting background task…",
+    "backgroundHint": "You can close this panel. The task continues in the background; reopen it to recover progress and the result.",
+    "connectionError": "Connection interrupted. The task may still be running; its result will be checked when the connection recovers.",
+    "phase": {
+      "queued": "Task accepted, preparing…",
+      "metadata": "Fetching official release metadata…",
+      "downloading": "Downloading Xray…",
+      "verifying": "Verifying archive SHA256…",
+      "extracting": "Extracting and checking the core version…",
+      "validating": "Validating the core and current XHTTP configurations…",
+      "switching": "Switching core and reconnecting…",
+      "done": "Update completed"
+    },
     "title": "Xray core manager",
     "description": "Update to an official release or use your system Xray.",
     "loading": "Loading…",

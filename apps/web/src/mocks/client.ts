@@ -48,8 +48,60 @@ function selectMockCore(mode: string, path: string, version: string) {
   return mockXrayCore
 }
 
+let mockTask = {
+  id: '',
+  status: 'idle',
+  kind: '',
+  version: '',
+  phase: '',
+  downloadedBytes: 0,
+  totalBytes: 0,
+  error: '',
+}
+let mockTaskStarted = 0
+let mockTaskPath = ''
+
+function currentMockTask() {
+  if (mockTask.status === 'running') {
+    const elapsed = Date.now() - mockTaskStarted
+    if (elapsed < 3000) {
+      mockTask = {
+        ...mockTask,
+        phase: 'downloading',
+        downloadedBytes: Math.min(15_000_000, Math.round(elapsed * 5000)),
+        totalBytes: 15_000_000,
+      }
+    } else {
+      if (mockTask.kind === 'install')
+        selectMockCore('managed', `/etc/daed/xray/${mockTask.version}/xray`, mockTask.version.replace(/^v/, ''))
+      else if (mockTask.kind === 'rollback')
+        selectMockCore(previousXrayCore.mode, previousXrayCore.path, previousXrayCore.version)
+      else selectMockCore(mockTask.kind, mockTaskPath || '/usr/local/bin/xray', '26.10.31')
+      mockTask = { ...mockTask, status: 'succeeded', phase: 'done' }
+    }
+  }
+  return { ...mockTask }
+}
+
 // Mock response handlers mapped by operation name
 const mockHandlers: Record<string, (variables?: Variables) => unknown> = {
+  XrayTask: () => ({ xrayTask: currentMockTask() }),
+  StartXrayTask: (variables) => {
+    if (mockTask.status === 'running') throw new Error('An Xray operation is already running')
+    mockTaskStarted = Date.now()
+    mockTaskPath = mockVariable(variables, 'path')
+    mockTask = {
+      id: String(mockTaskStarted),
+      status: 'running',
+      kind: mockVariable(variables, 'kind'),
+      version: mockVariable(variables, 'version'),
+      phase: 'queued',
+      downloadedBytes: 0,
+      totalBytes: 0,
+      error: '',
+    }
+    return { startXrayTask: { ...mockTask } }
+  },
   XrayCore: () => ({ xrayCore: mockXrayCore }),
   XrayReleases: () => ({
     xrayReleases: ['v26.10.31', 'v26.10.21', 'v26.9.30'].map((version) => ({ version, prerelease: false })),
