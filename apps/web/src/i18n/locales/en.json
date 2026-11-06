@@ -1,7 +1,9 @@
 {
   "geodata": {
+    "schedule": "Daily update time (UTC+8)",
+    "saveTime": "Save time",
     "title": "Rule data",
-    "description": "Download GeoIP and GeoSite from Loyalsoldier. Restart daed to apply updated rules.",
+    "description": "Download GeoIP and GeoSite from Loyalsoldier. In Docker, daed restarts when verified rules change.",
     "missing": "File not found",
     "updating": "Updating…",
     "update": "Update now",
