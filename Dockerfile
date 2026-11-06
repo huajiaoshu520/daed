@@ -59,7 +59,7 @@ RUN go test ./graphql -run TestXrayCoreSchema -count=1
 
 FROM alpine
 
-RUN apk add --no-cache ca-certificates wget
+RUN apk add --no-cache ca-certificates
 
 LABEL org.opencontainers.image.source="https://github.com/huajiaoshu520/daed"
 
@@ -76,7 +76,7 @@ COPY --from=build-bundle /build/wing/daed /usr/local/bin/daed
 COPY --from=build-xray /usr/local/bin/xray /usr/local/bin/xray
 COPY --from=build-xray /build/xray/LICENSE /usr/local/share/licenses/xray/LICENSE
 
-ENV DAED_RESTART_ON_GEODATA=1 DAED_GEODATA_WGET=1
+ENV DAED_RESTART_ON_GEODATA=1
 
 EXPOSE 2023
 
