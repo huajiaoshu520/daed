@@ -1,5 +1,53 @@
 # Changelog
 
+## [1.29.0](https://github.com/huajiaoshu520/daed/compare/v1.28.0...v1.29.0) (2026-11-06)
+
+
+### Features
+
+* add built-in rule data manager ([e75885d](https://github.com/huajiaoshu520/daed/commit/e75885d48c0bca5e9818c2c429013550d5c17820))
+* clean obsolete managed cores after successful updates ([84e00df](https://github.com/huajiaoshu520/daed/commit/84e00dfebaf82ce9af600ca46b7ae278a22e8cea))
+* clean old Xray versions after successful updates ([57a6ecb](https://github.com/huajiaoshu520/daed/commit/57a6ecbeedfe07b2803edd21168c757382b2fd57))
+* **dae-lsp:** add browser LSP support and fix completions ([32b5b49](https://github.com/huajiaoshu520/daed/commit/32b5b49abd58b8f16c72a2f2dd188bc7c2cf7877))
+* optimize user experience ([7013499](https://github.com/huajiaoshu520/daed/commit/701349900e004eafa8c3e4c4326059c63fb8057a))
+* **parser:** add parser for dae language with AST and symbol information ([12b5754](https://github.com/huajiaoshu520/daed/commit/12b5754b8f53b5dbac00b9aac0839f5d52113736))
+* re-trigger release-please ([4febcf7](https://github.com/huajiaoshu520/daed/commit/4febcf7ebba807474e8215510669e0a756c31585))
+* synchronize Xray core manager and bundle v26.10.31 ([65a6999](https://github.com/huajiaoshu520/daed/commit/65a699956eb200b76c7b04a90572e1197854c2a1))
+* synchronize Xray core manager and v26.10.31 ([8c750ec](https://github.com/huajiaoshu520/daed/commit/8c750ec1bddba1ceb3fc717bb4916a2504a6aa13))
+* trigger release ([e6618d5](https://github.com/huajiaoshu520/daed/commit/e6618d5cfb721dec3633278018e2f254c23daff9))
+* **ui:** enhance layout and visual design system ([1bc9280](https://github.com/huajiaoshu520/daed/commit/1bc928076986884658551f5634a80b86d10c3a26))
+* update pnpm workspace and add turbo configuration ([4484dc4](https://github.com/huajiaoshu520/daed/commit/4484dc43be6f1d229053bcc7bd589c528707024f))
+* **web:** add bootstrap resolver config input ([#757](https://github.com/huajiaoshu520/daed/issues/757)) ([4d6a433](https://github.com/huajiaoshu520/daed/commit/4d6a43331f2f6e25961935b9e7ac09a7568bb2b4))
+* **web:** add group resource pickers and improve drag UX ([#736](https://github.com/huajiaoshu520/daed/issues/736)) ([cfb0ec5](https://github.com/huajiaoshu520/daed/commit/cfb0ec528cc8bc3bfeed1dd1a9353bf9fa62de03))
+* **web:** add regex-filtered group subscriptions ([#738](https://github.com/huajiaoshu520/daed/issues/738)) ([3b62c11](https://github.com/huajiaoshu520/daed/commit/3b62c111172a906edc9d79335527f8206819cb8c))
+* **web:** add runtime traffic overview and node latency displays ([#742](https://github.com/huajiaoshu520/daed/issues/742)) ([4a519fc](https://github.com/huajiaoshu520/daed/commit/4a519fcbaa7004e50e80a309c68d6811596468cf))
+* **xray:** accept VLESS encryption in the node form [skip ci] ([9c47878](https://github.com/huajiaoshu520/daed/commit/9c47878c60fd7f20d1e71475e5e0dfa726da81aa))
+* **xray:** expose VLESS encryption in the node editor [skip ci] ([3dfa4f3](https://github.com/huajiaoshu520/daed/commit/3dfa4f3d6d0ebbf37294ab21bf514dfde00fb563))
+* **xray:** set VLESS encryption form default [skip ci] ([5a04a7c](https://github.com/huajiaoshu520/daed/commit/5a04a7c53f064e9cf0bb9ba6c3f0a239b0e5e24d))
+
+
+### Bug Fixes
+
+* avoid long Xray update requests and recover progress ([25de783](https://github.com/huajiaoshu520/daed/commit/25de7839ff59216bdac0d1c4d761422b21c31df9))
+* clear transport errors when background task recovers ([3a18fd2](https://github.com/huajiaoshu520/daed/commit/3a18fd225d4977572dd6b175628af70c39a73481))
+* **dnd:** allow dragging subscription nodes into groups ([605ad48](https://github.com/huajiaoshu520/daed/commit/605ad4847232fdc882ccf1304e8c6417b7645b6b))
+* **dnd:** migrate to @hello-pangea/dnd and fix drag issues in modals ([76d4492](https://github.com/huajiaoshu520/daed/commit/76d4492793236d73a897657cafdcbf09b9d46c1f))
+* **pr-677:** address review feedback ([ebd7b7c](https://github.com/huajiaoshu520/daed/commit/ebd7b7c379e85e49feb986f7d1da99f1fa30d2d0))
+* recover Xray release downloads from EOF and timeouts ([82d2360](https://github.com/huajiaoshu520/daed/commit/82d236049a2398a00525b3ab6b23e34b21b7a696))
+* remove rolldownOptions from build configuration ([632c33d](https://github.com/huajiaoshu520/daed/commit/632c33d620522c9d960321aa0ad6690f6b3fc2a2))
+* resolve CI failures from dependency upgrade breakages ([e46053f](https://github.com/huajiaoshu520/daed/commit/e46053f3f809cc632c9550720cbf41e9df423f90))
+* retry Xray downloads through official asset API and HTTP/1.1 ([d0e1334](https://github.com/huajiaoshu520/daed/commit/d0e1334e13fa1d82996cbcaed3a274a9b8ea7ca1))
+* run Xray updates in background with recoverable progress ([7cda7ca](https://github.com/huajiaoshu520/daed/commit/7cda7ca050675eafde598484b337442f12e2f22a))
+* **ui:** fix scrolling issue of multi-select component ([#726](https://github.com/huajiaoshu520/daed/issues/726)) ([a8fe086](https://github.com/huajiaoshu520/daed/commit/a8fe08601dc1e5c4b34932a1bd95960c6c20c77d))
+* **web:** drop unused GroupAddNodes variable ([#741](https://github.com/huajiaoshu520/daed/issues/741)) ([02016e7](https://github.com/huajiaoshu520/daed/commit/02016e70505b8ca35ae717f641276f479bbd742e))
+* **web:** first batch of dashboard fixes from a whole-project review ([#784](https://github.com/huajiaoshu520/daed/issues/784)) ([b3043aa](https://github.com/huajiaoshu520/daed/commit/b3043aa7ce07c774c65e546112aa2c7a1c12edb5))
+* **web:** preserve setup progress after successful login ([f375e7c](https://github.com/huajiaoshu520/daed/commit/f375e7c15945ad8dea81dcc3ec9366820da50280))
+* **web:** scope session remounts to authenticated routes ([969ccbe](https://github.com/huajiaoshu520/daed/commit/969ccbe7692cdccf900dee5bd54e97812029d2bb))
+* **xray:** retain encryption when generating VLESS links [skip ci] ([e9c75dd](https://github.com/huajiaoshu520/daed/commit/e9c75dd44efcf5a1b8f3e559b0de61f34312d8bf))
+* **xray:** run encrypted XHTTP Vision links with Xray 26.10.29 ([325d3a2](https://github.com/huajiaoshu520/daed/commit/325d3a26e7fe9103f6ce43b3535c0c050f4f0231))
+* **xray:** upgrade core and preserve encrypted XHTTP Vision links ([127b130](https://github.com/huajiaoshu520/daed/commit/127b130e9bd231d4317d41bbcafa925660d1be1c))
+* 节点行域名过长时删除按钮被挤出可视区域 ([55030d3](https://github.com/huajiaoshu520/daed/commit/55030d340da11a0e55cb8bb95caf314b42c23386))
+
 ## [1.28.0](https://github.com/daeuniverse/daed/compare/v1.27.0...v1.28.0) (2026-04-18)
 
 
