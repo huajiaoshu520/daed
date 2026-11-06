@@ -76,6 +76,8 @@ COPY --from=build-bundle /build/wing/daed /usr/local/bin/daed
 COPY --from=build-xray /usr/local/bin/xray /usr/local/bin/xray
 COPY --from=build-xray /build/xray/LICENSE /usr/local/share/licenses/xray/LICENSE
 
+ENV DAED_RESTART_ON_GEODATA=1
+
 EXPOSE 2023
 
 CMD ["daed", "run", "-c", "/etc/daed"]
