@@ -51,6 +51,7 @@ import { fileToBase64 } from '~/utils'
 
 import { CommandPalette, useCommandPaletteActions } from './CommandPalette'
 import { FormActions } from './FormActions'
+import { GeodataManager } from './GeodataManager'
 import { KeyboardShortcutsModal } from './KeyboardShortcutsModal'
 import { ProfileSwitcher } from './ProfileSwitcher'
 import { ThemePicker } from './ThemePicker'
@@ -309,6 +310,7 @@ export function HeaderWithActions() {
         <div className={cn('flex items-center', matchSmallScreen ? 'gap-1' : 'gap-2')}>
           {!matchSmallScreen && <ProfileSwitcher />}
           <XrayCoreManager />
+          <GeodataManager />
 
           <DropdownMenu open={userMenuOpened} onOpenChange={setUserMenuOpened}>
             <DropdownMenuTrigger asChild>

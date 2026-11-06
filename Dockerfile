@@ -40,7 +40,7 @@ COPY --from=build-web /build/wing /build/wing
 
 WORKDIR /build/wing
 COPY --from=build-xray /usr/local/bin/xray /usr/local/bin/xray
-RUN go test ./component/xray ./component/xraycore
+RUN go test ./component/xray ./component/xraycore ./component/geodata
 RUN cd /build/wing && \
     echo "===== dae dependency =====" && \
     go list -m github.com/daeuniverse/dae && \

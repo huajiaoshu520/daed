@@ -1,4 +1,13 @@
 {
+  "geodata": {
+    "title": "Rule data",
+    "description": "Download GeoIP and GeoSite from Loyalsoldier. Restart daed to apply updated rules.",
+    "missing": "File not found",
+    "updating": "Updating…",
+    "update": "Update now",
+    "disableDaily": "Disable daily updates",
+    "enableDaily": "Enable daily updates"
+  },
   "xray": {
     "cleanOld": "Clean old versions",
     "cleaned": "Old managed versions cleaned. The selected and bundled recovery cores were kept.",
